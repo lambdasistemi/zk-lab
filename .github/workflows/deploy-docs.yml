@@ -1,0 +1,48 @@
+name: Build and deploy documentation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Docs
+    runs-on: nixos
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/cachix-action@v15
+        with:
+          name: paolino
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build docs
+        run: >-
+          nix develop github:paolino/dev-assets?dir=mkdocs --quiet
+          -c mkdocs build --strict
+
+      - name: Deploy PR preview to surge.sh
+        if: github.event_name == 'pull_request'
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+        run: >-
+          nix shell nixpkgs#nodejs --quiet -c
+          npx --yes surge ./site
+          lambdasistemi-zk-lab-pr-${{ github.event.number }}.surge.sh
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        run: >-
+          nix develop github:paolino/dev-assets?dir=mkdocs --quiet
+          -c mkdocs gh-deploy --force
