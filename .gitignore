@@ -1,0 +1,32 @@
+# Nix
+result
+result-*
+.direnv/
+
+# Haskell
+dist
+dist-newstyle
+.ghc.environment.*
+*.hi
+*.o
+cabal.project.local
+cabal.project.local~
+.hpc
+.hsenv
+
+# Rust
+target/
+Cargo.lock
+
+# LLM investigation notes (local only)
+.llm/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# MkDocs
+site/
