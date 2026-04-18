@@ -1,0 +1,396 @@
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix bibo:    <http://purl.org/ontology/bibo/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix gb:      <https://lambdasistemi.github.io/graph-browser/vocab/gb#> .
+@prefix gbkind:  <https://lambdasistemi.github.io/graph-browser/vocab/gbkind#> .
+@prefix gbedge:  <https://lambdasistemi.github.io/graph-browser/vocab/gbedge#> .
+
+@prefix zkp:     <https://lambdasistemi.github.io/zk-lab/vocab/zkp#> .
+@prefix ch:      <https://lambdasistemi.github.io/zk-lab/vocab/chapter#> .
+
+# -------------------------------------------------------------------
+# Concept schemes (chapters). graph-browser uses these as filters.
+# -------------------------------------------------------------------
+
+ch:Culture a skos:ConceptScheme ;
+    dcterms:title "Culture" ;
+    dcterms:description
+      "History, communities, and social-political forces that shaped zero-knowledge cryptography." ;
+    rdfs:label "Culture" .
+
+ch:Abstractions a skos:ConceptScheme ;
+    dcterms:title "Abstractions" ;
+    dcterms:description
+      "Mathematical and logical scaffolding: proofs, soundness, extractors, arithmetization, commitments." ;
+    rdfs:label "Abstractions" .
+
+ch:Challenges a skos:ConceptScheme ;
+    dcterms:title "Real-life challenges" ;
+    dcterms:description
+      "What breaks when zero-knowledge meets the world: ceremony governance, regulation, hardware, UX." ;
+    rdfs:label "Real-life challenges" .
+
+# -------------------------------------------------------------------
+# Custom classes (minimal; prefer reuse where possible)
+# -------------------------------------------------------------------
+
+zkp:Concept a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Zero-knowledge concept" .
+
+zkp:ProofSystem a owl:Class ;
+    rdfs:subClassOf zkp:Concept ;
+    rdfs:label "Proof system" ;
+    rdfs:comment "A family of protocols sharing a setup / soundness / efficiency profile." .
+
+zkp:Arithmetization a owl:Class ;
+    rdfs:subClassOf zkp:Concept ;
+    rdfs:label "Arithmetization" .
+
+zkp:Commitment a owl:Class ;
+    rdfs:subClassOf zkp:Concept ;
+    rdfs:label "Commitment scheme" .
+
+zkp:Setup a owl:Class ;
+    rdfs:subClassOf zkp:Concept ;
+    rdfs:label "Setup model" .
+
+zkp:Property a owl:Class ;
+    rdfs:subClassOf zkp:Concept ;
+    rdfs:label "Protocol property" .
+
+zkp:Deployment a owl:Class ;
+    rdfs:subClassOf zkp:Concept ;
+    rdfs:label "Deployment" .
+
+zkp:Challenge a owl:Class ;
+    rdfs:subClassOf zkp:Concept ;
+    rdfs:label "Real-life challenge" .
+
+# -------------------------------------------------------------------
+# Properties we use beyond SKOS/Dublin Core
+# -------------------------------------------------------------------
+
+zkp:builtOn a owl:ObjectProperty ;
+    rdfs:label "built on" ;
+    rdfs:comment "The subject construction depends on the object as a building block." .
+
+zkp:dependsOn a owl:ObjectProperty ;
+    rdfs:label "depends on" ;
+    rdfs:comment "Generic dependency between concepts (may be technical or historical)." .
+
+zkp:displacedBy a owl:ObjectProperty ;
+    rdfs:label "displaced by" ;
+    rdfs:comment "Historical succession: the object superseded the subject in practice." .
+
+zkp:mitigates a owl:ObjectProperty ;
+    rdfs:label "mitigates" ;
+    rdfs:comment "Subject addresses or partially resolves the object challenge." .
+
+zkp:inducedBy a owl:ObjectProperty ;
+    rdfs:label "induced by" ;
+    rdfs:comment "Subject arises as a consequence of the object." .
+
+# -------------------------------------------------------------------
+# CULTURE chapter
+# -------------------------------------------------------------------
+
+zkp:GMR1985 a bibo:AcademicArticle, zkp:Concept ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "GMR1985" ; gb:group "origin" ;
+    rdfs:label "Goldwasser–Micali–Rackoff 1985" ;
+    dcterms:title "The Knowledge Complexity of Interactive Proof-Systems" ;
+    dcterms:creator "Shafi Goldwasser", "Silvio Micali", "Charles Rackoff" ;
+    dcterms:issued "1985"^^xsd:gYear ;
+    dcterms:description
+      "Originating paper of interactive zero-knowledge. Introduces completeness, soundness, and the simulator-based definition of zero-knowledge." ;
+    foaf:page <https://doi.org/10.1145/22145.22178> ;
+    rdfs:seeAlso <https://people.csail.mit.edu/silvio/Selected%20Scientific%20Papers/Proof%20Systems/The_Knowledge_Complexity_Of_Interactive_Proof_Systems.pdf> .
+
+zkp:BCCT1988 a bibo:AcademicArticle, zkp:Concept ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "BCCT1988" ; gb:group "origin" ;
+    rdfs:label "Blum–Feldman–Micali, Ben-Or et al. 1988" ;
+    dcterms:title "Non-Interactive Zero-Knowledge" ;
+    dcterms:issued "1988"^^xsd:gYear ;
+    dcterms:description
+      "Non-interactive zero-knowledge in the common reference string model. The template every modern SNARK still follows." ;
+    foaf:page <https://doi.org/10.1137/0220068> .
+
+zkp:Zcash a zkp:Deployment ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "Zcash" ; gb:group "deployment" ;
+    rdfs:label "Zcash" ;
+    dcterms:description
+      "First large-scale deployment of zk-SNARKs for confidential payments (2016). Sapling upgrade (2018) brought Groth16. Catalyst for ceremony engineering (the original Zcash powers-of-tau)." ;
+    foaf:page <https://z.cash/> ;
+    zkp:builtOn zkp:Groth16 .
+
+zkp:Ethereum a zkp:Deployment ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "Ethereum" ; gb:group "deployment" ;
+    rdfs:label "Ethereum L2 / rollup ecosystem" ;
+    dcterms:description
+      "The economic centre of mass for production SNARK verification. zk-rollups (zkSync, Scroll, Linea, Starknet) normalized on-chain verification of SNARKs and STARKs, which in turn shaped tooling and ceremony norms." ;
+    foaf:page <https://ethereum.org/en/zero-knowledge-proofs/> .
+
+zkp:Cardano a zkp:Deployment ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "Cardano" ; gb:group "deployment" ;
+    rdfs:label "Cardano / Plutus" ;
+    dcterms:description
+      "Deterministic UTxO smart-contract platform. Plutus V3 exposes BN254 and BLS12-381 builtins, making Groth16 and BBS+ verifiers buildable on chain. The target platform for this lab." ;
+    foaf:page <https://cips.cardano.org/cip/CIP-0381> .
+
+zkp:PSE a foaf:Organization ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "PSE" ; gb:group "community" ;
+    rdfs:label "Privacy & Scaling Explorations (PSE)" ;
+    dcterms:description
+      "Ethereum Foundation-affiliated research group maintaining the widely-used fork of Halo2 and driving open ZK tooling." ;
+    foaf:page <https://pse.dev/> .
+
+zkp:AikenFoundation a foaf:Organization ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "AikenFoundation" ; gb:group "community" ;
+    rdfs:label "Aiken Language Foundation" ;
+    dcterms:description
+      "Stewards of the Aiken language for writing Plutus validators." ;
+    foaf:page <https://aiken-lang.org/> .
+
+zkp:Ceremony a zkp:Concept ;
+    skos:inScheme ch:Culture ;
+    a gb:Node ; gb:nodeId "Ceremony" ; gb:group "culture" ;
+    rdfs:label "Trusted setup ceremony" ;
+    dcterms:description
+      "Multi-party computation to produce a structured reference string such that the secret randomness is erased if any one participant is honest. Running one is a governance event, not a cryptography event." ;
+    foaf:page <https://ceremony.ethereum.org/> .
+
+# -------------------------------------------------------------------
+# ABSTRACTIONS chapter
+# -------------------------------------------------------------------
+
+zkp:Completeness a zkp:Property ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "Completeness" ; gb:group "property" ;
+    rdfs:label "Completeness" ;
+    dcterms:description
+      "If the statement is true and both parties are honest, the verifier accepts. Necessary but cheap to satisfy in isolation." .
+
+zkp:Soundness a zkp:Property ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "Soundness" ; gb:group "property" ;
+    rdfs:label "Soundness" ;
+    dcterms:description
+      "No prover (including a cheating one) can convince the verifier of a false statement except with negligible probability. Usually strengthened to knowledge-soundness via an extractor." .
+
+zkp:ZeroKnowledge a zkp:Property ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "ZeroKnowledge" ; gb:group "property" ;
+    rdfs:label "Zero-knowledge" ;
+    dcterms:description
+      "Formally defined via a simulator: an algorithm that produces the verifier's transcript without the witness. Strength varies (perfect / statistical / computational)." ;
+    rdfs:seeAlso zkp:GMR1985 .
+
+zkp:Simulator a zkp:Concept ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "Simulator" ; gb:group "property" ;
+    rdfs:label "Simulator" ;
+    dcterms:description
+      "A hypothetical algorithm that, given only the statement, produces a transcript indistinguishable from a real interaction. The existence of a simulator is what formalizes 'zero-knowledge'." .
+
+zkp:Extractor a zkp:Concept ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "Extractor" ; gb:group "property" ;
+    rdfs:label "Knowledge extractor" ;
+    dcterms:description
+      "A hypothetical algorithm that, given black-box access to a convincing prover, extracts a valid witness. Upgrades 'soundness' to 'knowledge-soundness' — we don't just trust the statement is true, we trust the prover knows why." .
+
+zkp:R1CS a zkp:Arithmetization ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "R1CS" ; gb:group "arithmetization" ;
+    rdfs:label "R1CS (Rank-1 Constraint System)" ;
+    dcterms:description
+      "Constraints of the shape ⟨A, z⟩ · ⟨B, z⟩ = ⟨C, z⟩ over a finite field. The classical target of Groth16; natural output of circom." .
+
+zkp:PLONKish a zkp:Arithmetization ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "PLONKish" ; gb:group "arithmetization" ;
+    rdfs:label "PLONKish arithmetization" ;
+    dcterms:description
+      "Tabular arithmetization with custom gates, permutation arguments, and lookup arguments. Used by PLONK, Halo2, and many modern SNARKs." ;
+    rdfs:seeAlso zkp:Halo2 .
+
+zkp:KZG a zkp:Commitment ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "KZG" ; gb:group "commitment" ;
+    rdfs:label "KZG polynomial commitment" ;
+    dcterms:description
+      "Constant-size polynomial commitment scheme requiring a trusted (powers-of-tau) setup. The commitment and opening are pairing-checkable." ;
+    foaf:page <https://iacr.org/archive/asiacrypt2010/6477178/6477178.pdf> .
+
+zkp:Pedersen a zkp:Commitment ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "Pedersen" ; gb:group "commitment" ;
+    rdfs:label "Pedersen commitment" ;
+    dcterms:description
+      "Perfectly hiding, computationally binding commitment over an elliptic curve group. Basis for Bulletproofs and for the non-pairing parts of many credential schemes." .
+
+zkp:TrustedSetup a zkp:Setup ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "TrustedSetup" ; gb:group "setup" ;
+    rdfs:label "Trusted setup (structured reference string)" ;
+    dcterms:description
+      "A reference string whose randomness is toxic if retained. Per-circuit (Groth16) or universal (PLONK/Halo2/KZG). Ceremonies distribute the trust assumption." .
+
+zkp:TransparentSetup a zkp:Setup ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "TransparentSetup" ; gb:group "setup" ;
+    rdfs:label "Transparent setup" ;
+    dcterms:description
+      "A reference string derivable from a public source of randomness, requiring no ceremony. STARKs and Halo2+IPA fit here." .
+
+zkp:FiatShamir a zkp:Concept ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "FiatShamir" ; gb:group "technique" ;
+    rdfs:label "Fiat–Shamir transformation" ;
+    dcterms:description
+      "Turns interactive public-coin protocols into non-interactive ones by deriving the verifier's challenges from a hash of the transcript so far. Soundness relies on the hash behaving like a random oracle." ;
+    foaf:page <https://link.springer.com/chapter/10.1007/3-540-47721-7_12> .
+
+# -------------------------------------------------------------------
+# Proof systems (bridge: named in culture, analyzed in abstractions)
+# -------------------------------------------------------------------
+
+zkp:Groth16 a zkp:ProofSystem ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "Groth16" ; gb:group "system" ;
+    rdfs:label "Groth16" ;
+    dcterms:title "On the Size of Pairing-Based Non-interactive Arguments" ;
+    dcterms:creator "Jens Groth" ;
+    dcterms:issued "2016"^^xsd:gYear ;
+    dcterms:description
+      "Pairing-based SNARK with 3-element proofs and 3-pairing verification. Per-circuit trusted setup. Still dominant in production because on-chain verification is cheap." ;
+    foaf:page <https://eprint.iacr.org/2016/260> ;
+    zkp:builtOn zkp:R1CS ;
+    zkp:builtOn zkp:KZG ;
+    zkp:dependsOn zkp:TrustedSetup .
+
+zkp:BBSPlus a zkp:ProofSystem ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "BBSPlus" ; gb:group "system" ;
+    rdfs:label "BBS+" ;
+    dcterms:description
+      "Pairing-based multi-message signature with efficient zero-knowledge proofs of possession. Specialized for selective disclosure of credentials." ;
+    foaf:page <https://datatracker.ietf.org/doc/draft-irtf-cfrg-bbs-signatures/> ;
+    zkp:builtOn zkp:Pedersen ;
+    zkp:dependsOn zkp:FiatShamir .
+
+zkp:Halo2 a zkp:ProofSystem ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "Halo2" ; gb:group "system" ;
+    rdfs:label "Halo2" ;
+    dcterms:description
+      "PLONKish SNARK with universal setup (via KZG) or transparent setup (via IPA). Supports recursion, custom gates, and lookups. Maintained by PSE." ;
+    foaf:page <https://zcash.github.io/halo2/> ;
+    zkp:builtOn zkp:PLONKish ;
+    zkp:builtOn zkp:KZG ;
+    zkp:builtOn zkp:FiatShamir .
+
+zkp:PLONK a zkp:ProofSystem ;
+    skos:inScheme ch:Abstractions ;
+    a gb:Node ; gb:nodeId "PLONK" ; gb:group "system" ;
+    rdfs:label "PLONK" ;
+    dcterms:title "Permutations over Lagrange-bases for Oecumenical Noninteractive arguments of Knowledge" ;
+    dcterms:issued "2019"^^xsd:gYear ;
+    dcterms:description
+      "Universal and updateable zk-SNARK. Direct ancestor of Halo2." ;
+    foaf:page <https://eprint.iacr.org/2019/953> .
+
+# -------------------------------------------------------------------
+# CHALLENGES chapter
+# -------------------------------------------------------------------
+
+zkp:CeremonyGovernance a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "CeremonyGovernance" ; gb:group "governance" ;
+    rdfs:label "Ceremony governance" ;
+    dcterms:description
+      "Running a trusted setup ceremony is a political and logistical problem as much as a cryptographic one. Who participates? Who verifies participation? What happens on update? Zcash, Ethereum KZG, and Semaphore ceremonies have evolved distinct norms." ;
+    zkp:inducedBy zkp:TrustedSetup .
+
+zkp:QuantumThreat a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "QuantumThreat" ; gb:group "cryptographic" ;
+    rdfs:label "Quantum threat" ;
+    dcterms:description
+      "Pairing-based systems (Groth16, BBS+, Halo2-KZG) break under a cryptographically-relevant quantum computer. Post-quantum ZK (STARKs, hash-based commitments) is a distinct trajectory with larger proofs and different trade-offs." .
+
+zkp:Auditability a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "Auditability" ; gb:group "societal" ;
+    rdfs:label "Auditability vs privacy" ;
+    dcterms:description
+      "Privacy by zero-knowledge must coexist with auditability: anti-money-laundering, tax, and consumer protection. Viewing keys, selective decryption, and escrow schemes attempt to reconcile the two — with varying success and varying political backing." .
+
+zkp:Regulation a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "Regulation" ; gb:group "societal" ;
+    rdfs:label "Regulatory pressure" ;
+    dcterms:description
+      "GDPR, MiCA, eIDAS 2.0, and the EU Digital Identity Wallet push toward verifiable-credential systems where selective disclosure is a requirement. ZK is one of a small set of technical answers; whether regulators accept it is an open question." .
+
+zkp:CircuitBugs a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "CircuitBugs" ; gb:group "correctness" ;
+    rdfs:label "Under-constrained circuits" ;
+    dcterms:description
+      "A ZK circuit that is under-constrained accepts witnesses it shouldn't — silently. These bugs look identical to correct circuits from the verifier's side. Formal verification (Lean, Picus, Ecne) and careful review are the only real defenses." .
+
+zkp:ProverHardware a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "ProverHardware" ; gb:group "operational" ;
+    rdfs:label "Prover hardware" ;
+    dcterms:description
+      "Proving is computationally expensive. Large circuits need minutes to hours on a laptop. GPU and FPGA provers are the current frontier; they also concentrate who can prove at scale." .
+
+zkp:UX a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "UX" ; gb:group "operational" ;
+    rdfs:label "User experience" ;
+    dcterms:description
+      "Latency, wallet integration, key management, credential lifecycles — none of these look like the elegant math in the paper. The UX gap is where most real deployments live or die." .
+
+zkp:PlutusBudget a zkp:Challenge ;
+    skos:inScheme ch:Challenges ;
+    a gb:Node ; gb:nodeId "PlutusBudget" ; gb:group "platform" ;
+    rdfs:label "Plutus execution budget" ;
+    dcterms:description
+      "Plutus scripts have a hard CPU and memory budget. Fitting within it constrains which proof systems are viable on chain. Groth16 is comfortable; BBS+ is comfortable; Halo2 is the open question." ;
+    zkp:inducedBy zkp:Cardano .
+
+# Cross-chapter relationships
+
+zkp:Ceremony zkp:mitigates zkp:TrustedSetup ;
+    skos:inScheme ch:Culture .
+
+zkp:BBSPlus zkp:mitigates zkp:CeremonyGovernance ;
+    skos:inScheme ch:Abstractions ;
+    rdfs:comment "BBS+ has no per-statement setup; only the issuer key is a trust root." .
+
+zkp:Halo2 zkp:mitigates zkp:CeremonyGovernance ;
+    skos:inScheme ch:Abstractions ;
+    rdfs:comment "Universal (or transparent) setup removes per-circuit ceremony." .
+
+zkp:GMR1985 zkp:dependsOn zkp:Simulator ;
+    skos:inScheme ch:Culture .
+
+zkp:Groth16 zkp:dependsOn zkp:CeremonyGovernance ;
+    skos:inScheme ch:Abstractions .

@@ -1,35 +1,94 @@
 site_name: zk-lab
 site_url: https://lambdasistemi.github.io/zk-lab/
+site_description: >-
+  Intention-driven zero-knowledge DSL targeting Plutus.
+  Groth16, BBS+, Halo2 as interchangeable backends.
 repo_url: https://github.com/lambdasistemi/zk-lab
 repo_name: lambdasistemi/zk-lab
+edit_uri: edit/main/docs/
 
 theme:
   name: material
   palette:
-    scheme: slate
-    primary: deep purple
-    accent: amber
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   features:
     - navigation.indexes
     - navigation.sections
     - navigation.path
     - navigation.top
-    - content.code.copy
     - toc.integrate
+    - content.code.copy
+    - content.action.edit
+
+plugins:
+  - search
 
 markdown_extensions:
   - admonition
   - tables
   - footnotes
   - def_list
+  - attr_list
+  - md_in_html
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path:
+        - .
+        - docs
+      check_paths: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
 
 nav:
   - Home: index.md
+  - Constitution: constitution.md
+  - DSL:
+      - dsl/index.md
+      - Intentions: dsl/intentions.md
+      - Backends as plumbing: dsl/backends.md
+      - Parity matrix: dsl/parity-matrix.md
+      - Test vectors: dsl/test-vectors.md
+      - Properties (Lean + QC): dsl/properties.md
+  - Tutorial:
+      - tutorial/index.md
+      - 1. What is a proof?: tutorial/01-what-is-a-proof.md
+      - 2. Zero-knowledge in one page: tutorial/02-zero-knowledge.md
+      - 3. Groth16 intuition: tutorial/03-groth16.md
+      - 4. BBS+ intuition: tutorial/04-bbs.md
+      - 5. Halo2 intuition: tutorial/05-halo2.md
+      - 6. Plutus verifier intuition: tutorial/06-plutus.md
+  - Semantic graph:
+      - semantic-graph/index.md
+      - Culture: semantic-graph/culture.md
+      - Abstractions: semantic-graph/abstractions.md
+      - Real-life challenges: semantic-graph/challenges.md
+      - Turtle source: semantic-graph/zkp.ttl.md
+  - Implementation:
+      - implementation/index.md
+      - Groth16 backend: implementation/groth16.md
+      - BBS+ backend: implementation/bbs.md
+      - Halo2 backend: implementation/halo2.md
+      - Aiken verifiers: implementation/aiken.md
+      - cardano-node-clients: implementation/chain-io.md
