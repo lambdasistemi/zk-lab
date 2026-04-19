@@ -1,0 +1,32 @@
+{
+  "culture": {
+    "label": "Culture",
+    "description": "History, communities, and social forces that shaped ZK.",
+    "view": true,
+    "query": "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX dcterms: <http://purl.org/dc/terms/> PREFIX ch: <https://lambdasistemi.github.io/zk-lab/vocab/chapter#> SELECT ?node ?label ?description WHERE { ?node skos:inScheme ch:Culture ; rdfs:label ?label . OPTIONAL { ?node dcterms:description ?description } } ORDER BY ?label"
+  },
+  "abstractions": {
+    "label": "Abstractions",
+    "description": "Mathematical and logical scaffolding.",
+    "view": true,
+    "query": "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX dcterms: <http://purl.org/dc/terms/> PREFIX ch: <https://lambdasistemi.github.io/zk-lab/vocab/chapter#> SELECT ?node ?label ?description WHERE { ?node skos:inScheme ch:Abstractions ; rdfs:label ?label . OPTIONAL { ?node dcterms:description ?description } } ORDER BY ?label"
+  },
+  "challenges": {
+    "label": "Real-life challenges",
+    "description": "What breaks when ZK meets the world.",
+    "view": true,
+    "query": "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX dcterms: <http://purl.org/dc/terms/> PREFIX ch: <https://lambdasistemi.github.io/zk-lab/vocab/chapter#> SELECT ?node ?label ?description WHERE { ?node skos:inScheme ch:Challenges ; rdfs:label ?label . OPTIONAL { ?node dcterms:description ?description } } ORDER BY ?label"
+  },
+  "mitigations": {
+    "label": "What mitigates what",
+    "description": "Cross-cutting view of which concepts mitigate which challenges.",
+    "view": true,
+    "query": "PREFIX zkp: <https://lambdasistemi.github.io/zk-lab/vocab/zkp#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> SELECT ?mitigator ?mitigatorLabel ?challenge ?challengeLabel WHERE { ?mitigator zkp:mitigates ?challenge . ?mitigator rdfs:label ?mitigatorLabel . ?challenge rdfs:label ?challengeLabel }"
+  },
+  "crossChapter": {
+    "label": "Cross-chapter relationships",
+    "description": "Edges whose endpoints sit in different chapters.",
+    "view": true,
+    "query": "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> SELECT ?s ?p ?o ?schemeS ?schemeO WHERE { ?s ?p ?o . ?s skos:inScheme ?schemeS . ?o skos:inScheme ?schemeO . FILTER(?schemeS != ?schemeO) }"
+  }
+}

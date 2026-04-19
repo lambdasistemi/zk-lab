@@ -1,0 +1,35 @@
+{
+  "title": "zk-lab semantic graph",
+  "description": "Concepts, people, papers, deployments, and challenges shaping zero-knowledge cryptography for Cardano/Plutus. Split into three chapters via SKOS concept schemes: Culture, Abstractions, Real-life challenges.",
+  "sourceUrl": "https://github.com/lambdasistemi/zk-lab",
+  "graphSources": [
+    { "format": "turtle", "path": "rdf/zkp.ttl" }
+  ],
+  "kinds": {
+    "gbkind:Concept": {
+      "label": "Concept",
+      "color": "#8a63d2",
+      "shape": "circle"
+    },
+    "gbkind:Paper": {
+      "label": "Paper",
+      "color": "#d2b463",
+      "shape": "document"
+    },
+    "gbkind:Deployment": {
+      "label": "Deployment",
+      "color": "#63a2d2",
+      "shape": "square"
+    },
+    "gbkind:Organization": {
+      "label": "Organization",
+      "color": "#63d286",
+      "shape": "hexagon"
+    },
+    "gbkind:Challenge": {
+      "label": "Challenge",
+      "color": "#d26363",
+      "shape": "diamond"
+    }
+  }
+}
