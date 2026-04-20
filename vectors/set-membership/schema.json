@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lambdasistemi.github.io/zk-lab/schemas/set-membership/v1.json",
+  "title": "zk-lab set-membership vector",
+  "description": "Shared test-vector schema for the set-membership primitive. Every backend consumes this store; no backend-local fixtures are allowed.",
+  "oneOf": [
+    { "$ref": "#/$defs/PositiveCase" },
+    { "$ref": "#/$defs/TamperingCase" }
+  ],
+  "$defs": {
+    "HexBytes": {
+      "type": "string",
+      "pattern": "^[0-9a-f]*$"
+    },
+    "PositiveCase": {
+      "type": "object",
+      "required": [
+        "kind",
+        "name",
+        "set",
+        "canonicalSet",
+        "canonicalTag",
+        "value",
+        "expectedVerdict",
+        "citation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "positive" },
+        "name": { "type": "string", "minLength": 1 },
+        "set": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HexBytes" }
+        },
+        "canonicalSet": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HexBytes" },
+          "description": "Sorted and deduped; elements are strictly monotonically increasing under lexicographic byte order."
+        },
+        "canonicalTag": {
+          "allOf": [
+            { "$ref": "#/$defs/HexBytes" },
+            { "minLength": 64, "maxLength": 64 }
+          ],
+          "description": "SHA-256 of domain-separation tag 'zk-lab/set-membership/v1' concatenated with the byte-level concatenation of canonicalSet, hex-encoded."
+        },
+        "value": { "$ref": "#/$defs/HexBytes" },
+        "expectedVerdict": { "const": "accept" },
+        "citation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "TamperingCase": {
+      "type": "object",
+      "required": [
+        "kind",
+        "name",
+        "baseCase",
+        "mutation",
+        "expectedVerdict",
+        "citation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "tampering" },
+        "name": { "type": "string", "minLength": 1 },
+        "baseCase": {
+          "type": "string",
+          "description": "The PositiveCase.name that this tampering mutates."
+        },
+        "mutation": { "$ref": "#/$defs/Mutation" },
+        "expectedVerdict": { "const": "reject" },
+        "citation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Mutation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["tag", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "tag": { "const": "non-member" },
+            "value": {
+              "$ref": "#/$defs/HexBytes",
+              "description": "Replacement value that is not in baseCase.canonicalSet."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["tag", "otherSet"],
+          "additionalProperties": false,
+          "properties": {
+            "tag": { "const": "wrong-commitment" },
+            "otherSet": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/HexBytes" },
+              "description": "A different set whose commitment is substituted while keeping baseCase.value."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["tag", "bitIndex"],
+          "additionalProperties": false,
+          "properties": {
+            "tag": { "const": "flipped-proof-bit" },
+            "bitIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Zero-based index of the bit to flip inside the backend-generated proof."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["tag", "otherSet"],
+          "additionalProperties": false,
+          "properties": {
+            "tag": { "const": "replay-across-sets" },
+            "otherSet": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/HexBytes" },
+              "description": "A different set under whose commitment the baseCase proof is replayed."
+            }
+          }
+        }
+      ]
+    }
+  }
+}
