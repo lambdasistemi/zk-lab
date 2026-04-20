@@ -37,6 +37,13 @@ check-vectors:
     nix run --quiet .#vectors
     nix build --quiet .#checks.x86_64-linux.offchain
 
+# T042: property-parity gate (SC-003) — Lean theorems in the
+# parity section of lean/ZKLab/SetMembership.lean in 1:1 with the
+# prop_* identifiers of
+# offchain/src/ZK/DSL/Properties/SetMembership.hs.
+check-property-parity:
+    nix run --quiet .#property-parity
+
 docs-strict:
     nix run --quiet .#docs-strict
 
@@ -58,10 +65,12 @@ CI:
         .#checks.x86_64-linux.lean \
         .#checks.x86_64-linux.aiken-skeleton \
         .#checks.x86_64-linux.vectors \
+        .#checks.x86_64-linux.property-parity \
         .#checks.x86_64-linux.docs-strict
     nix run --quiet .#format
     nix run --quiet .#hlint
     nix run --quiet .#lean
     nix run --quiet .#aiken-skeleton
     nix run --quiet .#vectors
+    nix run --quiet .#property-parity
     nix run --quiet .#docs-strict
