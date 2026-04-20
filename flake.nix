@@ -19,7 +19,20 @@
         # for the 9.10.x major series.
         haskell = pkgs.haskell.packages.ghc910;
 
-        offchain = haskell.callCabal2nix "zk-lab" ./offchain { };
+        # Bundle the shared vectors store into the offchain source tree
+        # so the test-suite (ZK.Vectors.SetMembershipSpec) can reach it
+        # from cabal's working directory inside the nix sandbox. The
+        # loader defaults to the relative path "vectors/set-membership",
+        # which resolves against that bundled layout.
+        offchainSrcWithVectors =
+          pkgs.runCommand "zk-lab-offchain-with-vectors" { } ''
+            mkdir -p $out
+            cp -r ${./offchain}/. $out/
+            cp -r ${./vectors} $out/vectors
+          '';
+
+        offchain =
+          haskell.callCabal2nix "zk-lab" offchainSrcWithVectors { };
 
         checks = import ./nix/checks.nix {
           inherit pkgs haskell offchain;
