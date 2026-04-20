@@ -101,6 +101,25 @@ in
       '';
     };
 
+  # mkdocs build emitting ./site in the caller's cwd. Consumed by
+  # deploy-docs.yml (surge preview + gh-deploy).
+  docs-build =
+    let
+      mkdocsEnv = pkgs.python3.withPackages (ps: [
+        ps.mkdocs
+        ps.mkdocs-material
+        ps.pymdown-extensions
+      ]);
+    in
+    pkgs.writeShellApplication {
+      name = "zk-lab-docs-build";
+      runtimeInputs = [ mkdocsEnv ];
+      excludeShellChecks = [ "SC2046" "SC2086" ];
+      text = ''
+        mkdocs build --strict --site-dir ./site
+      '';
+    };
+
   # mkdocs gh-deploy — publishes the built site to the gh-pages
   # branch. Not a verification check; exposed as an app via apps.nix.
   docs-deploy =
