@@ -67,6 +67,11 @@ premature optimization.
 
     The [constitution](constitution.md). It gates every PR.
 
+-   **I want to cite something.**
+
+    The [citation policy](dsl/citations.md). Principle 7a — every
+    borrowed definition, diagram, or snippet lands in the registry.
+
 </div>
 
 ## Non-goals
