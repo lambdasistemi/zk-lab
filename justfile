@@ -44,6 +44,10 @@ check-vectors:
 check-property-parity:
     nix run --quiet .#property-parity
 
+# T051: block production-readiness claims in docs/**/*.md.
+check-docs-disclaimers:
+    nix run --quiet .#docs-disclaimers
+
 docs-strict:
     nix run --quiet .#docs-strict
 
@@ -66,6 +70,7 @@ CI:
         .#checks.x86_64-linux.aiken-skeleton \
         .#checks.x86_64-linux.vectors \
         .#checks.x86_64-linux.property-parity \
+        .#checks.x86_64-linux.docs-disclaimers \
         .#checks.x86_64-linux.docs-strict
     nix run --quiet .#format
     nix run --quiet .#hlint
@@ -73,4 +78,5 @@ CI:
     nix run --quiet .#aiken-skeleton
     nix run --quiet .#vectors
     nix run --quiet .#property-parity
+    nix run --quiet .#docs-disclaimers
     nix run --quiet .#docs-strict
