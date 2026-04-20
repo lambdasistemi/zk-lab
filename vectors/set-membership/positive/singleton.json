@@ -1,0 +1,14 @@
+{
+  "kind": "positive",
+  "name": "singleton",
+  "set": [
+    "616c696365"
+  ],
+  "canonicalSet": [
+    "616c696365"
+  ],
+  "canonicalTag": "66394612d3bc573a1616dbd01aade4f4f54da9ef5eb1565f26cb614c88ee0614",
+  "value": "616c696365",
+  "expectedVerdict": "accept",
+  "citation": "Merkle 1987, §2 (Authentication trees), DOI:10.1007/3-540-48184-2_32"
+}

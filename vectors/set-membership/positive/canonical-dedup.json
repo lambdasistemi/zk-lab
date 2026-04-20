@@ -1,0 +1,20 @@
+{
+  "kind": "positive",
+  "name": "canonical-dedup",
+  "set": [
+    "636861726c6965",
+    "626f62",
+    "616c696365",
+    "626f62",
+    "616c696365"
+  ],
+  "canonicalSet": [
+    "616c696365",
+    "626f62",
+    "636861726c6965"
+  ],
+  "canonicalTag": "8173a1d612cfa0709264d7d47040c72cfd268da179c1b5508c062bd55c793a69",
+  "value": "636861726c6965",
+  "expectedVerdict": "accept",
+  "citation": "Merkle 1987, §2 (Authentication trees), DOI:10.1007/3-540-48184-2_32"
+}
