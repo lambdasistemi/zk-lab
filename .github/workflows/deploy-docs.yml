@@ -42,3 +42,23 @@ jobs:
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
         run: nix run --quiet .#docs-deploy
+
+      # Post-deploy smoke test (T050): the parity matrix is the
+      # discovery surface for the zk-lab DSL. If it 404s, the site
+      # is useless. gh-pages takes a few seconds to propagate, so
+      # retry briefly before failing the job.
+      - name: Smoke-test parity-matrix page
+        if: github.ref == 'refs/heads/main'
+        run: |
+          url=https://lambdasistemi.github.io/zk-lab/dsl/parity-matrix/
+          for attempt in 1 2 3 4 5 6; do
+            body=$(curl -fsS "$url" || true)
+            if [[ -n "$body" ]] && grep -qi 'set.membership' <<<"$body"; then
+              echo "smoke-test: OK ($url)"
+              exit 0
+            fi
+            echo "smoke-test: attempt $attempt failed, retrying..."
+            sleep 10
+          done
+          echo "smoke-test: FAIL — $url unreachable or missing set-membership" >&2
+          exit 1
