@@ -62,6 +62,14 @@ premature optimization.
 -   **I want to express a statement.**
 
     The [DSL](dsl/index.md). Intentions first; backends second.
+    First primitive to land end-to-end:
+    [set membership](dsl/primitives/set-membership.md).
+
+-   **I want to see what's implemented.**
+
+    The [parity matrix](dsl/parity-matrix.md). Every
+    intention × backend cell is ✅ works, ⚠️ gap, or
+    ❌ incompatible — no hedging.
 
 -   **I want to read the rules.**
 
