@@ -68,6 +68,8 @@ nav:
       - dsl/index.md
       - Intentions: dsl/intentions.md
       - Backends as plumbing: dsl/backends.md
+      - Primitives:
+          - Set membership: dsl/primitives/set-membership.md
       - Parity matrix: dsl/parity-matrix.md
       - Test vectors: dsl/test-vectors.md
       - Properties (Lean + QC): dsl/properties.md
