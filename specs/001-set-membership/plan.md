@@ -29,8 +29,11 @@ Mathlib4 (formal properties); Aiken 1.1+ (Plutus verifier skeleton —
 empty stubs only this slice).
 **Primary Dependencies**: `base`, `bytestring`, `aeson` (vector JSON),
 `QuickCheck`, `hspec` (off-chain test harness); `Mathlib.Probability`
-(Lean property module). No Rust, no FFI, no backend crates — explicitly
-out of scope.
+(Lean property module). No Rust, no FFI, no backend crates *in this
+slice*. Constitution principle 5 (FFI is the cryptography boundary)
+applies to backend PRs; this DSL-only slice contains no cryptography,
+so no FFI surface exists to bound yet — the boundary is established
+when the first backend lands.
 **Storage**: On-disk JSON under `vectors/set-membership/` (format-
 agnostic, format-stable). No databases, no generated artifacts in git.
 **Testing**: `hspec` drives QuickCheck properties; vectors loaded via
@@ -64,7 +67,7 @@ Aiken skeleton (module declaration + `TODO` comments).
 | 2 | Feature parity as a design target | Parity matrix row added with all three backends at ❌. Matrix renders in docs (SC-004). | PASS |
 | 3 | Plutus is the on-chain target | Aiken skeleton at `onchain/verifiers/set_membership/` is named and anchored (FR-010). | PASS |
 | 4 | Import, don't reinvent | No backend code here; import policy applies to backend PRs. Citations for Merkle/BBS+/GMR 1989 already in spec. | PASS |
-| 5 | FFI is the cryptography boundary | No FFI in this slice. First FFI lands with first backend PR. | PASS (N/A) |
+| 5 | FFI is the cryptography boundary | No cryptography in this slice, so no FFI surface yet to bound. The boundary is established and gated when the first backend PR lands (documented in plan.md §Technical Context). | PASS (deferred) |
 | 6 | Correctness before performance | QuickCheck properties include negative-witness cases; vector store catalogues tampering cases with expected `reject` verdicts. | PASS |
 | 6a | Shared test vectors | `vectors/set-membership/` is the sole fixture source (FR-004, FR-005). | PASS |
 | 6b | Properties, dual-specified | `lean/ZKLab/SetMembership.lean` + `offchain/src/ZK/DSL/Properties/SetMembership.hs` in same PR (FR-006, FR-007, SC-003). | PASS |

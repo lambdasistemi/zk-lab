@@ -93,7 +93,8 @@ the test suite; this spec ships the property *shapes* only.
 CI runs a small script (`offchain/scripts/check-property-parity.hs`)
 that parses:
 
-- every top-level `theorem`/`lemma` under
+- every `theorem` inside the named section
+  `-- ## Parity-tracked properties ##` of
   `lean/ZKLab/SetMembership.lean`
 - every top-level identifier matching `^prop_` in
   `offchain/src/ZK/DSL/Properties/SetMembership.hs`
@@ -101,6 +102,13 @@ that parses:
 and fails CI if the two sets are not in 1:1 correspondence (mapping
 driven by the table in this file). This is the "every property has a
 counterpart" check from SC-003, mechanized.
+
+**Helper-lemma policy**: Lean theorems outside the named parity
+section are classified as helpers (intermediate lemmas, unfolding
+facts). They are ignored by the parity script and are not expected
+to have a QuickCheck counterpart. A theorem that belongs on the
+parity table MUST live inside the section; a helper that accidentally
+lands inside the section is a mapping bug, not a parity bug.
 
 ## What is deliberately absent
 

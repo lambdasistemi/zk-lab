@@ -39,10 +39,11 @@ choice appears in their code or in the vectors.
    prover attempts to produce a proof, **Then** no honest prover can
    produce a verifying proof (soundness), and any attempt to verify a
    tampered proof against the real commitment rejects.
-3. **Given** two different sets `S₁` and `S₂` with the same committed
-   element `v`, **When** a verifier receives proofs for both, **Then**
-   the verifier cannot link them (zero-knowledge) — the proofs are
-   indistinguishable from proofs about an honest simulator.
+3. **Given** two different committed sets `S₁` and `S₂` that share a
+   common member `v`, **When** a verifier receives a proof of
+   membership against each commitment (both for `v`), **Then** the
+   verifier cannot link the two proofs (zero-knowledge) — each proof
+   is indistinguishable from output of an honest simulator.
 
 ---
 
@@ -120,9 +121,10 @@ counterpart.
   canonicalize (dedupe) before committing. Tested as a vector where
   the raw input has duplicates and the canonical commitment matches.
 - **Maximum set size**: The DSL places no abstract upper bound. Each
-  backend MAY register a practical cap in the parity matrix (e.g.
-  Groth16 Merkle depth 20 = 2^20 leaves). Exceeding a backend cap is a
-  gap, not a crash.
+  backend MUST register its practical cap in its parity-matrix cell
+  (e.g. Groth16 Merkle depth 20 = 2^20 leaves) as part of landing its
+  backend PR; an unset cap on a backend whose status is not ❌ is a
+  parity-matrix bug. Exceeding a registered cap is a gap, not a crash.
 - **Proof replay across sets**: A valid proof against commitment
   `C₁` MUST NOT verify against `C₂ ≠ C₁`. Tested as a tampering case
   in the vectors.
@@ -162,9 +164,13 @@ counterpart.
   generator-driven check. Its API MUST be importable by every backend's
   test suite.
 - **FR-008**: Every backend MUST appear in the parity matrix with a
-  row for this primitive, marked one of: ✅ (all vectors pass,
-  Plutus-deployable), ⚠️ (vectors pass but Plutus budget exceeds
-  limits — registered as a gap), or ❌ (not implemented).
+  row for this primitive, marked one of: ✅ (all vectors pass and the
+  on-chain verifier fits within the Plutus cost model cited in the
+  backend PR), ⚠️ (vectors pass but the Plutus cost model named in
+  the backend PR rejects the verifier — the cost model reference and
+  the specific budget dimension that fails MUST be recorded inline in
+  the matrix cell), or ❌ (not implemented). A cell marked ✅ or ⚠️
+  without a cost model reference is a parity-matrix bug.
 - **FR-009**: The spec MUST cite every borrowed formulation (Merkle
   path membership, BBS+ signature proof-of-knowledge, etc.) per
   constitution principle 7a. Uncited borrowings are bugs.
@@ -197,10 +203,14 @@ counterpart.
   `Groth16`, `BBS+`, `Halo2`. Every row begins at ❌ and is updated as
   backends land.
 - **Tampering case**: A vector-store entry describing a mutation of a
-  positive witness (swap commitment, flip a bit in the proof, replace
-  `v` with a non-member, etc.) and the expected verdict (always
-  "reject"). Every backend's test suite MUST execute every tampering
-  case.
+  positive witness and the expected verdict (always "reject"). The
+  mutation is one of the four enum tags defined in the vector schema:
+  `non-member` (replace `v` with a value not in `S`),
+  `wrong-commitment` (verify against a commitment for a different
+  set), `flipped-proof-bit` (flip one bit of the proof bytes), or
+  `replay-across-sets` (reuse a proof from `S₁` against the
+  commitment of `S₂`). Every backend's test suite MUST execute every
+  tampering case.
 - **Verifier module skeleton**: A named directory for the on-chain
   verifier. Contains no code yet; its existence anchors downstream
   implementation commits so each remains bisect-safe under
