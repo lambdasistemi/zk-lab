@@ -56,23 +56,34 @@ library
     ZK.DSL.SetMembership
     ZK.DSL.SetMembership.Types
     ZK.DSL.Verdict
+    ZK.Vectors.SetMembership
 
   build-depends:
+    , aeson              >=2.1  && <2.3
     , base               >=4.19 && <5
+    , base16-bytestring  >=1.0  && <1.1
     , bytestring         >=0.11 && <0.13
     , containers         >=0.6  && <0.8
     , cryptohash-sha256  >=0.11 && <0.12
+    , directory          >=1.3  && <1.4
+    , filepath           >=1.4  && <1.6
     , QuickCheck         >=2.14 && <2.16
+    , text               >=2.0  && <2.2
 
 test-suite unit-tests
   import:             warnings, lang
   type:               exitcode-stdio-1.0
   hs-source-dirs:     test
   main-is:            Spec.hs
-  other-modules:      ZK.DSL.SetMembershipSpec
+  other-modules:
+    ZK.DSL.SetMembershipSpec
+    ZK.Vectors.SetMembershipSpec
+
   build-depends:
     , base
-    , hspec   >=2.11 && <2.12
+    , directory  >=1.3  && <1.4
+    , hspec      >=2.11 && <2.12
+    , text       >=2.0  && <2.2
     , zk-lab
 
   build-tool-depends: hspec-discover:hspec-discover
