@@ -52,6 +52,7 @@ library
     ZK.Canonicalize
     ZK.DSL.Intention
     ZK.DSL.Placeholder
+    ZK.DSL.Properties.SetMembership
     ZK.DSL.SetMembership
     ZK.DSL.SetMembership.Types
     ZK.DSL.Verdict
@@ -61,3 +62,17 @@ library
     , bytestring         >=0.11 && <0.13
     , containers         >=0.6  && <0.8
     , cryptohash-sha256  >=0.11 && <0.12
+    , QuickCheck         >=2.14 && <2.16
+
+test-suite unit-tests
+  import:             warnings, lang
+  type:               exitcode-stdio-1.0
+  hs-source-dirs:     test
+  main-is:            Spec.hs
+  other-modules:      ZK.DSL.SetMembershipSpec
+  build-depends:
+    , base
+    , hspec   >=2.11 && <2.12
+    , zk-lab
+
+  build-tool-depends: hspec-discover:hspec-discover
