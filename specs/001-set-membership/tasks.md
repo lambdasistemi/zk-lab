@@ -151,17 +151,17 @@ the mapping table in contracts/properties.md is honored.
 
 ### Tests for User Story 3
 
-- [ ] T036 [P] [US3] Property `prop_completeness` in `offchain/src/ZK/DSL/Properties/SetMembership.hs` — parameterized over a `Backend` class stub (class body empty until a backend lands, but the property is well-typed).
-- [ ] T037 [P] [US3] Property `prop_soundness` in the same file (bounded adversary model; for DSL-only slice it asserts `verifyOff honestCommit tamperedProof == Reject` against a stub that rejects all inputs).
-- [ ] T038 [P] [US3] Property `prop_zero_knowledge` in the same file (stated with a placeholder simulator and `===` distributional equality — the body is `property True` until a backend instantiates it, but the name and type signature match P3).
-- [ ] T039 [P] [US3] Property `prop_proofs_unlinkable` in the same file (same placeholder pattern as P6).
+- [x] T036 [P] [US3] Property `prop_completeness` in `offchain/src/ZK/DSL/Properties/SetMembership.hs` — parameterized over a `Backend` class stub (class body empty until a backend lands, but the property is well-typed).
+- [x] T037 [P] [US3] Property `prop_soundness` in the same file (bounded adversary model; for DSL-only slice it asserts `verifyOff honestCommit tamperedProof == Reject` against a stub that rejects all inputs).
+- [x] T038 [P] [US3] Property `prop_zero_knowledge` in the same file (stated with a placeholder simulator and `===` distributional equality — the body is `property True` until a backend instantiates it, but the name and type signature match P3).
+- [x] T039 [P] [US3] Property `prop_proofs_unlinkable` in the same file (same placeholder pattern as P6).
 
 ### Implementation for User Story 3
 
-- [ ] T040 [P] [US3] Write `lean/ZKLab/SetMembership.lean` with Mathlib4 imports and the six `theorem` declarations P1–P6 from contracts/properties.md. Bodies are `sorry`; statements are the specification (stub for bisect-safety per Haskell skill). File-level cite block names Merkle 1987, Tessaro-Zhu 2023, GMR 1989.
-- [ ] T041 [US3] Implement `offchain/scripts/check-property-parity.hs` (or shell equivalent): scan `lean/ZKLab/SetMembership.lean` for theorems inside the named section `-- ## Parity-tracked properties ##` (helper lemmas outside that section are ignored), scan `offchain/src/ZK/DSL/Properties/SetMembership.hs` for `^prop_`, emit a diff against contracts/properties.md mapping table. Exit non-zero on drift (mechanizes SC-003).
-- [ ] T042 [US3] Add `just check-property-parity` and wire it into `just CI`.
-- [ ] T043 [US3] Cite Merkle 1987, Tessaro-Zhu 2023, GMR 1989 in the file-level header of `offchain/src/ZK/DSL/Properties/SetMembership.hs`.
+- [x] T040 [P] [US3] Write `lean/ZKLab/SetMembership.lean` with the six `theorem` declarations P1–P6 from contracts/properties.md. Bodies are `sorry`; statements are the specification (stub for bisect-safety per Haskell skill). File-level cite block names Merkle 1987, Tessaro-Zhu 2023, GMR 1989. (Mathlib4 pin is deferred to the first backend PR that needs `Finset` / `PMF` — the abstract-variable formulation keeps `lake build` offline inside the nix sandbox.)
+- [x] T041 [US3] Implement `offchain/scripts/check-property-parity.sh` (shell, cheaper than a Haskell executable): scan `lean/ZKLab/SetMembership.lean` for theorems inside the named section `-- ## Parity-tracked properties ##` (helper lemmas outside that section are ignored), scan `offchain/src/ZK/DSL/Properties/SetMembership.hs` for `^prop_`, emit a diff against contracts/properties.md mapping table. Exit non-zero on drift (mechanizes SC-003).
+- [x] T042 [US3] Add `just check-property-parity` and wire it into `just CI`. Flake app exposed as `.#property-parity`; CI gains a `property-parity` job depending on `build-gate`.
+- [x] T043 [US3] Cite Merkle 1987, Tessaro-Zhu 2023, GMR 1989 in the file-level header of `offchain/src/ZK/DSL/Properties/SetMembership.hs`.
 
 **Checkpoint**: SC-003 is mechanical: the parity script passes, Lean
 builds, QuickCheck runs. Bodies of ZK properties are placeholders
