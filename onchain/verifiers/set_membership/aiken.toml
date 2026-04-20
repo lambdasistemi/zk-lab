@@ -1,0 +1,16 @@
+name = "lambdasistemi/set_membership"
+version = "0.0.0"
+compiler = "v1.1.0"
+description = "Set-membership proof verifier — experimental skeleton, toy trusted setups only."
+license = "Apache-2.0"
+
+[repository]
+user = "lambdasistemi"
+project = "zk-lab"
+platform = "github"
+
+# aiken-lang/stdlib is added in Phase 3 when the first real verifier
+# arrives. For the Phase 1 skeleton we keep aiken.toml dependency-free
+# so `aiken check` runs inside a nix sandbox without network access.
+
+[config]

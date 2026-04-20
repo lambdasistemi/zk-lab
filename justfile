@@ -15,18 +15,29 @@ format:
     cabal-fmt -i offchain/*.cabal
     nixfmt flake.nix nix/*.nix
 
-# Run the same checks CI runs, via nix apps.
+# CI check recipes — thin wrappers over the sandboxed flake apps.
 format-check:
     nix run --quiet .#format
 
 hlint:
     nix run --quiet .#hlint
 
-# Build the DSL library via cabal (inside nix develop).
+build-lean:
+    nix run --quiet .#lean
+
+build-aiken-skeleton:
+    nix run --quiet .#aiken-skeleton
+
+check-vectors:
+    nix run --quiet .#vectors
+
+docs-strict:
+    nix run --quiet .#docs-strict
+
+# Local cabal recipes (dev-only, require `nix develop`).
 build-dsl:
     cabal build all -O0
 
-# Run the DSL test suite. Empty until Phase 3 US1 adds tests.
 test-dsl:
     cabal test all -O0 --test-show-details=direct
 
@@ -37,6 +48,14 @@ CI:
     nix build --quiet \
         .#checks.x86_64-linux.offchain \
         .#checks.x86_64-linux.format \
-        .#checks.x86_64-linux.hlint
+        .#checks.x86_64-linux.hlint \
+        .#checks.x86_64-linux.lean \
+        .#checks.x86_64-linux.aiken-skeleton \
+        .#checks.x86_64-linux.vectors \
+        .#checks.x86_64-linux.docs-strict
     nix run --quiet .#format
     nix run --quiet .#hlint
+    nix run --quiet .#lean
+    nix run --quiet .#aiken-skeleton
+    nix run --quiet .#vectors
+    nix run --quiet .#docs-strict

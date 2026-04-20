@@ -28,6 +28,10 @@ jobs:
           .#checks.x86_64-linux.offchain
           .#checks.x86_64-linux.format
           .#checks.x86_64-linux.hlint
+          .#checks.x86_64-linux.lean
+          .#checks.x86_64-linux.aiken-skeleton
+          .#checks.x86_64-linux.vectors
+          .#checks.x86_64-linux.docs-strict
 
   format:
     name: Formatting
@@ -54,3 +58,55 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - name: Run hlint
         run: nix run --quiet .#hlint
+
+  lean:
+    name: Lean
+    needs: build-gate
+    runs-on: nixos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/cachix-action@v15
+        with:
+          name: paolino
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Build Lean skeleton
+        run: nix run --quiet .#lean
+
+  aiken-skeleton:
+    name: Aiken skeleton
+    needs: build-gate
+    runs-on: nixos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/cachix-action@v15
+        with:
+          name: paolino
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Check Aiken skeleton
+        run: nix run --quiet .#aiken-skeleton
+
+  vectors:
+    name: Test vectors
+    needs: build-gate
+    runs-on: nixos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/cachix-action@v15
+        with:
+          name: paolino
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Validate vectors JSON
+        run: nix run --quiet .#vectors
+
+  docs-strict:
+    name: Docs (mkdocs --strict)
+    needs: build-gate
+    runs-on: nixos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/cachix-action@v15
+        with:
+          name: paolino
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Build docs
+        run: nix run --quiet .#docs-strict
