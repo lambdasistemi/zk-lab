@@ -1,0 +1,11 @@
+{
+  "kind": "tampering",
+  "name": "flipped-proof-bit-0",
+  "baseCase": "small-set",
+  "mutation": {
+    "tag": "flipped-proof-bit",
+    "bitIndex": 0
+  },
+  "expectedVerdict": "reject",
+  "citation": "GMR 1989, §3 (Soundness) / BBS+ 2004 strong unforgeability, DOI:10.1137/0218012"
+}

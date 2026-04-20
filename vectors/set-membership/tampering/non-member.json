@@ -1,0 +1,11 @@
+{
+  "kind": "tampering",
+  "name": "non-member-dave",
+  "baseCase": "small-set",
+  "mutation": {
+    "tag": "non-member",
+    "value": "64617665"
+  },
+  "expectedVerdict": "reject",
+  "citation": "GMR 1989, §3 (Soundness), DOI:10.1137/0218012"
+}

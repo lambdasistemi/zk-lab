@@ -1,0 +1,15 @@
+{
+  "kind": "tampering",
+  "name": "replay-bob-proof-under-alice-bob-david",
+  "baseCase": "small-set",
+  "mutation": {
+    "tag": "replay-across-sets",
+    "otherSet": [
+      "616c696365",
+      "626f62",
+      "6461766964"
+    ]
+  },
+  "expectedVerdict": "reject",
+  "citation": "GMR 1989, §3 (Soundness); commitment-binding replay is a non-transferability witness, DOI:10.1137/0218012"
+}
