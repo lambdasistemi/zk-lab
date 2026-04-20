@@ -112,6 +112,23 @@ in {
     '';
   };
 
+  # Docs disclaimer gate (FR-011): block production-readiness
+  # claims in docs/**/*.md.
+  docs-disclaimers = pkgs.writeShellApplication {
+    name = "zk-lab-docs-disclaimers";
+    runtimeInputs = [ pkgs.bash pkgs.gnugrep pkgs.coreutils ];
+    excludeShellChecks = [ "SC2046" "SC2086" ];
+    text = ''
+      work=$(mktemp -d)
+      mkdir -p "$work/offchain/scripts"
+      cp ${offchainSrc}/scripts/check-docs-disclaimers.sh \
+          "$work/offchain/scripts/"
+      cp -r ${docsSrc}/docs "$work/docs"
+      export ZK_LAB_ROOT="$work"
+      bash "$work/offchain/scripts/check-docs-disclaimers.sh"
+    '';
+  };
+
   # mkdocs --strict gate for every docs/ page.
   docs-strict = let
     mkdocsEnv = pkgs.python3.withPackages
