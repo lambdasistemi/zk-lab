@@ -28,8 +28,14 @@ build-lean:
 build-aiken-skeleton:
     nix run --quiet .#aiken-skeleton
 
+# T035: schema validation (nix check `vectors`, via check-jsonschema)
+# + canonicalization check (inside the offchain unit-tests,
+# ZK.Vectors.SetMembershipSpec T025).
 check-vectors:
+    #!/usr/bin/env bash
+    set -euo pipefail
     nix run --quiet .#vectors
+    nix build --quiet .#checks.x86_64-linux.offchain
 
 docs-strict:
     nix run --quiet .#docs-strict

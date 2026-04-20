@@ -6,11 +6,7 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , flake-utils
-    }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-darwin" ] (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -31,12 +27,9 @@
             cp -r ${./vectors} $out/vectors
           '';
 
-        offchain =
-          haskell.callCabal2nix "zk-lab" offchainSrcWithVectors { };
+        offchain = haskell.callCabal2nix "zk-lab" offchainSrcWithVectors { };
 
-        checks = import ./nix/checks.nix {
-          inherit pkgs haskell offchain;
-        };
+        checks = import ./nix/checks.nix { inherit pkgs haskell offchain; };
 
         apps = import ./nix/apps.nix { inherit pkgs checks; };
 
@@ -50,8 +43,7 @@
           pkgs.nixfmt-classic
           pkgs.shellcheck
         ];
-      in
-      {
+      in {
         devShells.default = pkgs.mkShell {
           name = "zk-lab-dev";
           buildInputs = devTools;
