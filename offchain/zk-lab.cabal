@@ -49,6 +49,7 @@ library
   hs-source-dirs:  src
   exposed-modules:
     ZK.Backend.Tag
+    ZK.Canonicalize
     ZK.DSL.Intention
     ZK.DSL.Placeholder
     ZK.DSL.SetMembership
@@ -56,6 +57,7 @@ library
     ZK.DSL.Verdict
 
   build-depends:
-    , base        >=4.19 && <5
-    , bytestring  >=0.11 && <0.13
-    , containers  >=0.6  && <0.8
+    , base               >=4.19 && <5
+    , bytestring         >=0.11 && <0.13
+    , containers         >=0.6  && <0.8
+    , cryptohash-sha256  >=0.11 && <0.12
