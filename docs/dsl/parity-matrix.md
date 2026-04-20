@@ -16,10 +16,13 @@ every backend cell has one of three values:
 | Selective disclosure                        | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
 | Voucher spend                               | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
 | Range                                       | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
-| [Set membership][set-membership-spec]       | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
+| [Set membership][set-membership-spec]       | [⚠️ gap][sm-groth16] | [⚠️ gap][sm-bbs] | [⚠️ gap][sm-halo2] |
 | Threshold                                   | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
 
 [set-membership-spec]: https://github.com/lambdasistemi/zk-lab/blob/main/specs/001-set-membership/spec.md
+[sm-groth16]: https://github.com/lambdasistemi/zk-lab/issues/10
+[sm-bbs]: https://github.com/lambdasistemi/zk-lab/issues/11
+[sm-halo2]: https://github.com/lambdasistemi/zk-lab/issues/12
 
 Everything is a gap because nothing is ported yet. This is the
 starting state; the [Groth16](../implementation/groth16.md) and
