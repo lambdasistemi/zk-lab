@@ -1,0 +1,13 @@
+{
+  "kind": "tampering",
+  "name": "wrong-commitment-alice-only",
+  "baseCase": "small-set",
+  "mutation": {
+    "tag": "wrong-commitment",
+    "otherSet": [
+      "616c696365"
+    ]
+  },
+  "expectedVerdict": "reject",
+  "citation": "GMR 1989, §3 (Soundness), DOI:10.1137/0218012"
+}
