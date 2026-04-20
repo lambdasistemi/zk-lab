@@ -173,14 +173,14 @@ until a backend instantiates them; the *shapes* exist.
 
 **Purpose**: Final docs, CI wiring, and validation against the spec.
 
-- [ ] T044 [P] Update `README.md` with "experimental, toy trusted setups only" disclaimer and link to `docs/dsl/primitives/set-membership.md` (FR-011).
-- [ ] T045 [P] Update `docs/index.md` to reference the new primitive docs and the parity matrix.
-- [ ] T046 [P] Run `fourmolu -m check`, `hlint`, and `cabal-fmt -c` across `offchain/`; fix violations. (Must pass CI gates per Haskell skill.)
-- [ ] T047 [P] Run `mkdocs build --strict` locally; fix any link or anchor errors.
-- [ ] T048 Manually walk `specs/001-set-membership/quickstart.md` top to bottom using a fresh clone in a scratch worktree. Time it: must be ≤30 minutes (SC-001). If it isn't, file an issue and reopen US1.
-- [ ] T049 [P] Update `docs/dsl/parity-matrix.md` note column with a link to each future backend's tracking issue (one each for Groth16, BBS+, Halo2 — the tickets themselves are out of scope).
-- [ ] T050 [P] Post-deploy smoke test (runs in CI after `mkdocs gh-deploy`): HTTP GET `https://lambdasistemi.github.io/zk-lab/dsl/parity-matrix/` and assert 200 + "set-membership" in body (mechanizes SC-004).
-- [ ] T051 [P] Grep `docs/**/*.md` for production-readiness language (`production`, `deploy to mainnet`, `secure for real use`, etc.); fail on any hit outside an explicit disclaimer block (enforces FR-011 at docs layer).
+- [x] T044 [P] Update `README.md` with "experimental, toy trusted setups only" disclaimer and link to `docs/dsl/primitives/set-membership.md` (FR-011).
+- [x] T045 [P] Update `docs/index.md` to reference the new primitive docs and the parity matrix.
+- [x] T046 [P] Run `fourmolu -m check`, `hlint`, and `cabal-fmt -c` across `offchain/`; fix violations. Verified via `nix build .#checks.x86_64-linux.format .#checks.x86_64-linux.hlint`.
+- [x] T047 [P] Run `mkdocs build --strict` locally; fix any link or anchor errors. Verified via `nix build .#checks.x86_64-linux.docs-strict`.
+- [x] T048 Manually walk `specs/001-set-membership/quickstart.md` top to bottom. One gap surfaced: a fresh `nix develop` shell has no Hackage index, so `just build-dsl` fails with "unknown package: cryptohash-sha256" until `cabal update` is run. Fixed by pinning `index-state` in `cabal.project`. Walk under 30 minutes after the fix — SC-001 holds.
+- [x] T049 [P] Update `docs/dsl/parity-matrix.md` note column with a link to each future backend's tracking issue — issues #10 (Groth16), #11 (BBS+), #12 (Halo2).
+- [x] T050 [P] Post-deploy smoke test (runs in CI after `mkdocs gh-deploy`): HTTP GET `https://lambdasistemi.github.io/zk-lab/dsl/parity-matrix/` and assert 200 + "set-membership" in body (mechanizes SC-004).
+- [x] T051 [P] Grep `docs/**/*.md` for production-readiness language; fail on any hit outside an explicit disclaimer block (enforces FR-011 at docs layer). Implemented as `offchain/scripts/check-docs-disclaimers.sh` + `.#docs-disclaimers` app + CI job. Whitelist of positive-claim phrases keeps third-party references legal.
 - [ ] T052 Commit and open PR follow-up (or merge PR #3) after all tasks above complete.
 
 ---
