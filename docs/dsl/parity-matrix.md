@@ -11,13 +11,15 @@ every backend cell has one of three values:
 
 ## Current state (bootstrap)
 
-| Intention \ Backend | Groth16 | BBS+ | Halo2 |
-|---------------------|---------|------|-------|
-| Selective disclosure | ⚠️ gap | ⚠️ gap | ⚠️ gap |
-| Voucher spend       | ⚠️ gap | ⚠️ gap | ⚠️ gap |
-| Range               | ⚠️ gap | ⚠️ gap | ⚠️ gap |
-| Set membership      | ⚠️ gap | ⚠️ gap | ⚠️ gap |
-| Threshold           | ⚠️ gap | ⚠️ gap | ⚠️ gap |
+| Intention \ Backend                         | Groth16 | BBS+   | Halo2  |
+|---------------------------------------------|---------|--------|--------|
+| Selective disclosure                        | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
+| Voucher spend                               | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
+| Range                                       | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
+| [Set membership][set-membership-spec]       | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
+| Threshold                                   | ⚠️ gap  | ⚠️ gap | ⚠️ gap |
+
+[set-membership-spec]: https://github.com/lambdasistemi/zk-lab/blob/main/specs/001-set-membership/spec.md
 
 Everything is a gap because nothing is ported yet. This is the
 starting state; the [Groth16](../implementation/groth16.md) and
