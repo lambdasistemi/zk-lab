@@ -71,6 +71,7 @@ nav:
       - Parity matrix: dsl/parity-matrix.md
       - Test vectors: dsl/test-vectors.md
       - Properties (Lean + QC): dsl/properties.md
+      - Citations: dsl/citations.md
   - Tutorial:
       - tutorial/index.md
       - 1. What is a proof?: tutorial/01-what-is-a-proof.md
