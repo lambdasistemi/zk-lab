@@ -88,6 +88,30 @@ in {
     '';
   };
 
+  # Property-parity gate (SC-003): every Lean theorem in the named
+  # parity section of lean/ZKLab/SetMembership.lean must have a
+  # QuickCheck counterpart in offchain/src/ZK/DSL/Properties/
+  # SetMembership.hs, matching the mapping table in
+  # specs/001-set-membership/contracts/properties.md.
+  property-parity = pkgs.writeShellApplication {
+    name = "zk-lab-property-parity";
+    runtimeInputs = [ pkgs.bash pkgs.gawk pkgs.coreutils pkgs.gnugrep ];
+    excludeShellChecks = [ "SC2046" "SC2086" ];
+    text = ''
+      work=$(mktemp -d)
+      mkdir -p "$work/offchain/scripts" "$work/lean/ZKLab" \
+          "$work/offchain/src/ZK/DSL/Properties" "$work/specs"
+      cp ${offchainSrc}/scripts/check-property-parity.sh \
+          "$work/offchain/scripts/"
+      cp ${offchainSrc}/src/ZK/DSL/Properties/SetMembership.hs \
+          "$work/offchain/src/ZK/DSL/Properties/"
+      cp ${leanSrc}/ZKLab/SetMembership.lean "$work/lean/ZKLab/"
+      touch "$work/specs/.gitkeep"
+      export ZK_LAB_ROOT="$work"
+      bash "$work/offchain/scripts/check-property-parity.sh"
+    '';
+  };
+
   # mkdocs --strict gate for every docs/ page.
   docs-strict = let
     mkdocsEnv = pkgs.python3.withPackages

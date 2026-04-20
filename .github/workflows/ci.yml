@@ -31,6 +31,7 @@ jobs:
           .#checks.x86_64-linux.lean
           .#checks.x86_64-linux.aiken-skeleton
           .#checks.x86_64-linux.vectors
+          .#checks.x86_64-linux.property-parity
           .#checks.x86_64-linux.docs-strict
 
   format:
@@ -97,6 +98,19 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - name: Validate vectors JSON
         run: nix run --quiet .#vectors
+
+  property-parity:
+    name: Property parity
+    needs: build-gate
+    runs-on: nixos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/cachix-action@v15
+        with:
+          name: paolino
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Check Lean / QuickCheck property parity (SC-003)
+        run: nix run --quiet .#property-parity
 
   docs-strict:
     name: Docs (mkdocs --strict)
