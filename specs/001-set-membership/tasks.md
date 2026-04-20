@@ -45,7 +45,7 @@ Every task below carries an exact file path.
 downstream task has a place to land and a green build to start from.
 
 - [ ] T001 Create the multi-root directory skeleton: `offchain/`, `lean/`, `vectors/set-membership/`, `onchain/verifiers/set_membership/`, `docs/dsl/primitives/`, `docs/dsl/` (for parity matrix). Empty `.gitkeep` where needed.
-- [ ] T002 [P] Add `offchain/zk-lab.cabal` with library + test-suite stanzas, index-state pinned, warning set from the Haskell skill. Declared exposed modules are forward-declared; empty `src/ZK/DSL/Placeholder.hs` keeps the build green.
+- [ ] T002 [P] Add `offchain/zk-lab.cabal` with library + test-suite stanzas, index-state pinned, warning set from the Haskell skill. Enumerate exposed modules explicitly: `ZK.DSL.Intention`, `ZK.DSL.SetMembership`, `ZK.DSL.Verdict`, `ZK.DSL.Properties.SetMembership`, `ZK.Backend.Tag`, `ZK.Canonicalize`, `ZK.Vectors.SetMembership`. Empty `src/ZK/DSL/Placeholder.hs` keeps the build green until Phase 2+ fills them.
 - [ ] T003 [P] Add `lean/lakefile.lean` and `lean/lean-toolchain` pinning Lean 4 + Mathlib4 per research.md D-03. Empty `lean/ZKLab/Placeholder.lean` keeps `lake build` green.
 - [ ] T004 [P] Add `onchain/verifiers/set_membership/aiken.toml` and `onchain/verifiers/set_membership/lib/set_membership.ak` with a `TODO` module stub only. README states "experimental, toy trusted setups only" (FR-011).
 - [ ] T005 [P] Extend `flake.nix` to expose one check per root: `checks.x86_64-linux.{dsl,lean,vectors,aiken-skeleton,docs-strict}`. Build gate in CI lists all five.
@@ -159,7 +159,7 @@ the mapping table in contracts/properties.md is honored.
 ### Implementation for User Story 3
 
 - [ ] T040 [P] [US3] Write `lean/ZKLab/SetMembership.lean` with Mathlib4 imports and the six `theorem` declarations P1–P6 from contracts/properties.md. Bodies are `sorry`; statements are the specification (stub for bisect-safety per Haskell skill). File-level cite block names Merkle 1987, Tessaro-Zhu 2023, GMR 1989.
-- [ ] T041 [US3] Implement `offchain/scripts/check-property-parity.hs` (or shell equivalent): scan `lean/ZKLab/SetMembership.lean` for top-level theorems, scan `offchain/src/ZK/DSL/Properties/SetMembership.hs` for `^prop_`, emit a diff against contracts/properties.md mapping table. Exit non-zero on drift (blocks SC-003).
+- [ ] T041 [US3] Implement `offchain/scripts/check-property-parity.hs` (or shell equivalent): scan `lean/ZKLab/SetMembership.lean` for theorems inside the named section `-- ## Parity-tracked properties ##` (helper lemmas outside that section are ignored), scan `offchain/src/ZK/DSL/Properties/SetMembership.hs` for `^prop_`, emit a diff against contracts/properties.md mapping table. Exit non-zero on drift (mechanizes SC-003).
 - [ ] T042 [US3] Add `just check-property-parity` and wire it into `just CI`.
 - [ ] T043 [US3] Cite Merkle 1987, Tessaro-Zhu 2023, GMR 1989 in the file-level header of `offchain/src/ZK/DSL/Properties/SetMembership.hs`.
 
@@ -179,7 +179,9 @@ until a backend instantiates them; the *shapes* exist.
 - [ ] T047 [P] Run `mkdocs build --strict` locally; fix any link or anchor errors.
 - [ ] T048 Manually walk `specs/001-set-membership/quickstart.md` top to bottom using a fresh clone in a scratch worktree. Time it: must be ≤30 minutes (SC-001). If it isn't, file an issue and reopen US1.
 - [ ] T049 [P] Update `docs/dsl/parity-matrix.md` note column with a link to each future backend's tracking issue (one each for Groth16, BBS+, Halo2 — the tickets themselves are out of scope).
-- [ ] T050 Commit and open PR follow-up (or merge PR #3) after all tasks above complete.
+- [ ] T050 [P] Post-deploy smoke test (runs in CI after `mkdocs gh-deploy`): HTTP GET `https://lambdasistemi.github.io/zk-lab/dsl/parity-matrix/` and assert 200 + "set-membership" in body (mechanizes SC-004).
+- [ ] T051 [P] Grep `docs/**/*.md` for production-readiness language (`production`, `deploy to mainnet`, `secure for real use`, etc.); fail on any hit outside an explicit disclaimer block (enforces FR-011 at docs layer).
+- [ ] T052 Commit and open PR follow-up (or merge PR #3) after all tasks above complete.
 
 ---
 
