@@ -1,7 +1,8 @@
 { pkgs, checks }:
 let
   runnable = {
-    inherit (checks) format hlint;
+    inherit (checks)
+      format hlint lean aiken-skeleton vectors docs-strict docs-deploy;
   };
 in
 builtins.mapAttrs
