@@ -51,6 +51,11 @@ library
     ZK.Backend.Tag
     ZK.DSL.Intention
     ZK.DSL.Placeholder
+    ZK.DSL.SetMembership
+    ZK.DSL.SetMembership.Types
     ZK.DSL.Verdict
 
-  build-depends:   base >=4.19 && <5
+  build-depends:
+    , base        >=4.19 && <5
+    , bytestring  >=0.11 && <0.13
+    , containers  >=0.6  && <0.8

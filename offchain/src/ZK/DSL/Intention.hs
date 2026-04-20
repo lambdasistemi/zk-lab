@@ -6,20 +6,24 @@ License     : Apache-2.0
 
 An 'Intention' is the user-facing statement the DSL compiles
 into a verifier. The type is indexed by a 'StatementFamily' so
-downstream consumers (e.g. the Aiken verifier, the reference
+downstream consumers (the Aiken verifier, the reference
 evaluator, the property QuickChecks) can dispatch on the family
 at the type level.
 
-Phase 2 lands the scaffolding only: the kind of families and
-the empty GADT. Each user story fills in its own constructor —
-'SetMembership' receives its @SetMember@ constructor in
+Constructors land per user story. 'SetMember' arrives in
 Phase 3 US1 (task T018 of
-@specs/001-set-membership/tasks.md@).
+@specs\/001-set-membership\/tasks.md@); subsequent families add
+their own constructors and their own 'StatementFamily' variant.
 -}
 module ZK.DSL.Intention
     ( StatementFamily (..)
-    , Intention
+    , Intention (..)
     ) where
+
+import ZK.DSL.SetMembership.Types
+    ( SetCommitment
+    , Value
+    )
 
 {- | Kind of statement families. Each downstream user story adds
 one constructor (and one GADT branch) here.
@@ -30,7 +34,18 @@ data StatementFamily
 
 {- | Closed GADT of intentions indexed by statement family.
 
-Intentionally empty in Phase 2. Constructors land per user
-story; see @docs/dsl/parity-matrix.md@ for the roadmap.
+The @f@ parameter is consumed at the type level; at runtime each
+constructor carries only the data the Haskell reference evaluator
+and the backends need. See
+@specs\/001-set-membership\/contracts\/intention.md@ for the
+per-family shape.
 -}
-data Intention (f :: StatementFamily)
+data Intention (f :: StatementFamily) where
+    {- | Assert that a private 'Value' belongs to the set whose
+    canonical commitment is 'SetCommitment'. The backend tag @s@
+    keeps the commitment linked to the backend that produced it.
+    -}
+    SetMember
+        :: Value
+        -> SetCommitment s
+        -> Intention 'SetMembership
