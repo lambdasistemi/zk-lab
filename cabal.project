@@ -4,3 +4,7 @@
 
 packages:
     offchain
+
+-- Pin the Hackage index so a fresh `nix develop` shell can build
+-- without `cabal update`. Keeps SC-001 (30-min quickstart) honest.
+index-state: 2026-04-20T12:22:34Z
