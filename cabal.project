@@ -1,0 +1,6 @@
+-- Workspace-level cabal project.
+-- Individual packages live under sibling directories (currently only
+-- offchain/). New packages append here.
+
+packages:
+    offchain
