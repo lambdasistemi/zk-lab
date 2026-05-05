@@ -29,15 +29,24 @@ jobs:
       - name: Build docs
         run: nix run --quiet .#docs-build
 
-      - name: Deploy PR preview to surge.sh
+      - name: Smoke-test docs on localhost
         if: github.event_name == 'pull_request'
-        env:
-          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
-        run: >-
-          nix shell nixpkgs#nodejs --quiet -c
-          npx --yes surge ./site
-          lambdasistemi-zk-lab-pr-${{ github.event.number }}.surge.sh
+        run: |
+          nix shell nixpkgs#python3 nixpkgs#curl --quiet -c bash -euo pipefail <<'SCRIPT'
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory site &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+
+          for _ in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          body=$(curl -fsS http://127.0.0.1:4173/dsl/parity-matrix/)
+          grep -qi 'set.membership' <<<"$body"
+          SCRIPT
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
