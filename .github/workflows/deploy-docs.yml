@@ -59,6 +59,7 @@ jobs:
       - name: Smoke-test parity-matrix page
         if: github.ref == 'refs/heads/main'
         run: |
+          nix shell nixpkgs#curl --quiet -c bash -euo pipefail <<'SCRIPT'
           url=https://lambdasistemi.github.io/zk-lab/dsl/parity-matrix/
           for attempt in 1 2 3 4 5 6; do
             body=$(curl -fsS "$url" || true)
@@ -71,3 +72,4 @@ jobs:
           done
           echo "smoke-test: FAIL — $url unreachable or missing set-membership" >&2
           exit 1
+          SCRIPT
