@@ -23,8 +23,20 @@ generator derivation.
 
 ## Status
 
-None of this is implemented yet. This PR is the documentation
-scaffold. Implementation lands in subsequent PRs, one primitive at a
-time, each requiring: a Lean property, a QuickCheck generator, a
-test-vector file, and parity across all supported backends (or an
-explicit gap entry).
+The first primitive — [set membership](primitives/set-membership.md) —
+has landed as a DSL-only slice. What exists today:
+
+- the DSL surface (`ZK.DSL.SetMembership`, `ZK.DSL.Intention`) and the
+  backend-independent canonicalizer (`ZK.Canonicalize`);
+- the dual property specification — Lean theorems in
+  `lean/ZKLab/SetMembership.lean` and their QuickCheck counterparts in
+  `ZK.DSL.Properties.SetMembership`, kept 1:1 by a CI parity gate;
+- the shared [test-vector store](test-vectors.md) under
+  `vectors/set-membership/`;
+- an Aiken verifier skeleton under `onchain/verifiers/set_membership/`.
+
+What does not exist yet: any backend. No Groth16, BBS+, or Halo2
+instance has landed, so every cell in the [parity
+matrix](parity-matrix.md) is still a gap. Subsequent PRs add backends
+one at a time, each requiring vectors to pass and the Lean/QuickCheck
+properties to hold (or an explicit gap entry).

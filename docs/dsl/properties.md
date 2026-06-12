@@ -27,22 +27,28 @@ CI.
 
 ## Layout
 
-```
-lean/ZKLab/
-├── Intentions/
-│   ├── SelectiveDisclosure.lean
-│   ├── VoucherSpend.lean
-│   ├── Range.lean
-│   └── ...
-└── ZKLab.lean            -- top-level import
+One Lean module and one QuickCheck module per primitive. Today only
+the set-membership pair exists:
 
-offchain/src/ZK/DSL/
-└── Properties/
-    ├── SelectiveDisclosure.hs   -- QuickCheck generators + properties
-    ├── VoucherSpend.hs
-    ├── Range.hs
-    └── ...
+```text
+lean/
+├── ZKLab.lean                  -- top-level import
+└── ZKLab/
+    └── SetMembership.lean       -- P1–P6 as `theorem`s (bodies `sorry`)
+
+offchain/src/ZK/DSL/Properties/
+└── SetMembership.hs             -- genSet + the prop_* counterparts
 ```
+
+Each future primitive adds a `lean/ZKLab/<Primitive>.lean` plus a
+`offchain/src/ZK/DSL/Properties/<Primitive>.hs`. The two must stay in
+1:1 correspondence: `offchain/scripts/check-property-parity.sh` (CI app
+`property-parity`) fails the build if a `theorem` in the Lean parity
+section has no matching `prop_*`, or vice versa (SC-003). For set
+membership the mapping is pinned in
+[`contracts/properties.md`][contract].
+
+[contract]: https://github.com/lambdasistemi/zk-lab/blob/main/specs/001-set-membership/contracts/properties.md
 
 ## Shape of a property
 

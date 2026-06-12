@@ -3,6 +3,15 @@
 Backends exist to make intentions real. They are not the story; they
 are the story's set dressing.
 
+!!! note "Status: design sketch, nothing landed"
+    No backend exists in the repo yet — there is no `Backend` class,
+    no Rust FFI crate, and no `offchain/cbits/`. The DSL surface is
+    deliberately backend-free (see [set
+    membership](primitives/set-membership.md)). This page is the
+    planned shape every backend PR will be held to, not a description
+    of code that ships today. Live status is the [parity
+    matrix](parity-matrix.md).
+
 ## The uniform backend interface
 
 Every backend exposes the same Haskell interface (sketch):
@@ -36,8 +45,8 @@ can't fit, it's a gap, not an exception in the interface.*
 
 ## Where cryptography lives
 
-In Rust crates under `offchain/cbits/<backend>-ffi/` with a narrow C
-ABI. Haskell owns:
+The planned split: cryptography in Rust crates under
+`offchain/cbits/<backend>-ffi/` with a narrow C ABI. Haskell owns:
 
 - DSL types
 - serialization / deserialization
