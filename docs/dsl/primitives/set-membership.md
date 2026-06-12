@@ -17,31 +17,36 @@ The public surface, matching
 [`contracts/intention.md`][contracts-intention] exactly:
 
 ```haskell
+import ZK.Backend.Tag (BackendTag (Groth16))
+import ZK.DSL.Intention (Intention, StatementFamily (SetMembership))
 import ZK.DSL.SetMembership
     ( Element (..)
-    , Set
-    , fromList
-    , Value (..)
     , SetCommitment
+    , Value (..)
+    , fromList
     , member
     )
 
-Just theSet <- pure $ fromList
-    [ Element "alice"
-    , Element "bob"
-    , Element "charlie"
-    ]
-
-let commit :: SetCommitment 'Groth16
-    commit = commitSet theSet   -- provided by the Groth16 backend
-
-let claim :: Intention 'SetMembership
-    claim = Value (Element "alice") `member` commit
+-- `fromList` is the only way to build a Set: it returns Nothing on
+-- the empty list and canonicalises (lex-sort + dedup) otherwise.
+claim :: Maybe (Intention 'SetMembership)
+claim = do
+    theSet <-
+        fromList
+            [ Element "alice"
+            , Element "bob"
+            , Element "charlie"
+            ]
+    let commit :: SetCommitment 'Groth16
+        commit = commitSet theSet -- commitSet comes from the backend
+    pure (Value (Element "alice") `member` commit)
 ```
 
 `commitSet` is deliberately not imported here — it comes from
-whichever backend module the caller wires up, and the choice of
-backend does not appear in the DSL author's imports.
+whichever backend module the caller wires up. The `member` call is
+backend-polymorphic (`SetCommitment s -> Intention 'SetMembership`);
+the only place a backend name surfaces is the phantom tag on
+`SetCommitment` (here `'Groth16`, from `ZK.Backend.Tag`).
 
 ## Semantics
 
@@ -55,10 +60,12 @@ The two statements the primitive makes precise:
   set carries no membership statement; the DSL rejects it at
   construction time.
 
-Both have a QuickCheck counterpart in
-`ZK.DSL.Properties.SetMembership` and will gain a Lean counterpart in
-Phase 3 US3. The full mapping of DSL property ↔ Lean theorem ↔
-QuickCheck property lives in
+Both are specified twice: as QuickCheck properties
+(`prop_canonicalization_idempotent`, `prop_empty_rejected`) in
+`ZK.DSL.Properties.SetMembership`, and as Lean theorems
+(`canonicalization`, `emptyRejected`) in
+`lean/ZKLab/SetMembership.lean`. The full mapping of DSL property ↔
+Lean theorem ↔ QuickCheck property — all six, P1–P6 — lives in
 [contracts/properties.md][contracts-properties].
 
 ## Canonicalization

@@ -18,6 +18,11 @@ tractable they are across backends:
 | **Set membership** | "*x* ∈ *S*, where *S* is committed by root *r*." | Groth16, Halo2 |
 | **Threshold** | "*k* of *n* credentials cosigned this statement." | BBS+ (with extensions), Halo2 |
 
+Of these, only **[set membership](primitives/set-membership.md)** has
+landed so far — as `Intention 'SetMembership` in `ZK.DSL.Intention`,
+with its DSL surface, properties, and vectors. The rest are roadmap;
+each lands with its own constructor on the `Intention` GADT.
+
 This list expands with experiments. Every addition requires:
 
 1. A *why* (see the [semantic graph /

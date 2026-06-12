@@ -31,12 +31,19 @@ starting state; the [Groth16](../implementation/groth16.md) and
 
 ## Enforcement
 
-CI reads this page (or a structured sidecar) and fails PRs that:
+The matrix is review-enforced today: reviewers block a PR that
 
-- add an intention without populating a cell for every backend;
-- move a cell from ✅ to ⚠️ without an accompanying justification
-  in the PR description;
-- claim ✅ without passing the shared test vectors for the cell.
+- adds an intention without populating a cell for every backend;
+- moves a cell from ✅ to ⚠️ without a justification in the PR
+  description;
+- claims ✅ without passing the shared test vectors for the cell.
+
+There is no CI job that parses this table yet. What *is* automated and
+backs a green cell is the pair of gates a backend PR has to clear: the
+shared-vector gates (`just check-vectors`) and the Lean ↔ QuickCheck
+property-parity gate (`just check-property-parity`, CI app
+`property-parity`). A ✅ that those gates do not support is a
+parity-matrix bug.
 
 ## The escape hatch
 
